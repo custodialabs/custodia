@@ -49,6 +49,10 @@ class Manifest:
             "records": [r.to_dict() for r in self.records],
         }
 
+    def canonical_bytes(self) -> bytes:
+        """Deterministic serialization — the exact bytes to sign / attest / diff."""
+        return json.dumps(self.to_dict(), sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+
     def save(self, path: PathLike) -> None:
         Path(path).write_text(json.dumps(self.to_dict(), ensure_ascii=False, indent=2), encoding="utf-8")
 

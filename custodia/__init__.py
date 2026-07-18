@@ -1,5 +1,6 @@
 """custodia — tamper-evident provenance & custody for source corpora."""
 from .adapters import seal_directory, seal_sqlite, verify_directory
+from .fetch import fetch, seal_fetched
 from .manifest import Manifest
 from .merkle import inclusion_proof, merkle_root, verify_inclusion
 from .record import ProvenanceRecord, hash_bytes, now_utc
@@ -15,6 +16,8 @@ __all__ = [
     "verify_bytes",
     "verify_file",
     "VerifyResult",
+    "fetch",
+    "seal_fetched",
     "merkle_root",
     "inclusion_proof",
     "verify_inclusion",

@@ -41,8 +41,31 @@ def test_manifest_roundtrip(tmp_path=None):
     assert len(m2.records) == 5
 
 
+def test_fetch_time_seal():
+    from custodia import seal_fetched, verify_bytes
+
+    data = b"<html>fetched source content</html>"
+    rec = seal_fetched("https://example.org/x", data, status=200, content_type="text/html")
+    assert rec.fetch_date and rec.fetcher == "custodia.fetch"
+    assert rec.origin == "https://example.org/x"
+    assert verify_bytes(data, rec).ok
+    assert "status=200" in rec.note
+
+
+def test_manifest_canonical_bytes_deterministic():
+    from custodia import Manifest, seal_bytes
+
+    m = Manifest(label="c")
+    for i in range(3):
+        m.add(seal_bytes(f"x{i}".encode(), origin=str(i)))
+    assert m.canonical_bytes() == m.canonical_bytes()  # deterministic
+    assert b"merkle_root" in m.canonical_bytes()
+
+
 if __name__ == "__main__":
     test_seal_verify_roundtrip()
     test_merkle_inclusion_all_indices()
     test_manifest_roundtrip()
+    test_fetch_time_seal()
+    test_manifest_canonical_bytes_deterministic()
     print("all tests passed")

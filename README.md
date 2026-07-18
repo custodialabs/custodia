@@ -63,11 +63,13 @@ A provenance record in `custodia` carries a small, explicit set of fields:
 
 ## Roadmap
 
-- [ ] `custodia.seal` / `custodia.verify` core (files + SQLite adapters)
-- [ ] Corpus manifest + Merkle root + inclusion proofs
-- [ ] Fetch-time custody hook (capture raw bytes + metadata at acquisition)
-- [ ] Signed manifests (detached signatures) for third-party attestation
-- [ ] CLI (`custodia seal` / `custodia verify` / `custodia manifest`)
+- [x] `custodia.seal` / `custodia.verify` core (files + SQLite adapters)
+- [x] Corpus manifest + Merkle root + inclusion proofs
+- [x] Fetch-time custody hook (`custodia.fetch` / `seal_fetched` — capture raw bytes + metadata at acquisition)
+- [x] Deterministic canonical serialization (`Manifest.canonical_bytes()` — the bytes to sign)
+- [x] CLI (`custodia seal` / `custodia verify` / `custodia root`)
+- [ ] Signed manifests (detached Ed25519/GPG signatures over `canonical_bytes()`) for third-party attestation
+- [ ] Content-addressed storage adapters (IPFS / CAS)
 
 ## License
 
