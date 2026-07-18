@@ -62,10 +62,48 @@ def test_manifest_canonical_bytes_deterministic():
     assert b"merkle_root" in m.canonical_bytes()
 
 
+def test_hmac_sign_verify():
+    from custodia import Manifest, seal_bytes
+    from custodia.signing import sign_hmac, verify_hmac
+
+    m = Manifest(label="s")
+    m.add(seal_bytes(b"a", origin="0"))
+    data = m.canonical_bytes()
+    key = b"shared-secret"
+    sig = sign_hmac(data, key)
+    assert verify_hmac(data, key, sig)
+    assert not verify_hmac(data + b"x", key, sig)
+    assert not verify_hmac(data, b"wrong-key", sig)
+
+
+def test_ssh_sign_verify():
+    import os
+    import subprocess
+    import tempfile
+
+    from custodia import Manifest, seal_bytes
+    from custodia.signing import sign_ssh, ssh_available, verify_ssh
+
+    if not ssh_available():
+        return  # ssh-keygen absent -> skip (documented degrade)
+    with tempfile.TemporaryDirectory() as d:
+        kp = os.path.join(d, "k")
+        subprocess.run(["ssh-keygen", "-t", "ed25519", "-f", kp, "-N", "", "-q"], check=True)
+        pub = " ".join(open(kp + ".pub").read().split()[:2])
+        m = Manifest(label="ssh")
+        m.add(seal_bytes(b"payload", origin="0"))
+        data = m.canonical_bytes()
+        sig = sign_ssh(data, kp, namespace="custodia")
+        assert verify_ssh(data, sig, identity="custodia", public_key=pub, namespace="custodia")
+        assert not verify_ssh(data + b"tamper", sig, identity="custodia", public_key=pub, namespace="custodia")
+
+
 if __name__ == "__main__":
     test_seal_verify_roundtrip()
     test_merkle_inclusion_all_indices()
     test_manifest_roundtrip()
     test_fetch_time_seal()
     test_manifest_canonical_bytes_deterministic()
+    test_hmac_sign_verify()
+    test_ssh_sign_verify()
     print("all tests passed")

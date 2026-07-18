@@ -68,8 +68,9 @@ A provenance record in `custodia` carries a small, explicit set of fields:
 - [x] Fetch-time custody hook (`custodia.fetch` / `seal_fetched` — capture raw bytes + metadata at acquisition)
 - [x] Deterministic canonical serialization (`Manifest.canonical_bytes()` — the bytes to sign)
 - [x] CLI (`custodia seal` / `custodia verify` / `custodia root`)
-- [ ] Signed manifests (detached Ed25519/GPG signatures over `canonical_bytes()`) for third-party attestation
+- [x] Signed manifests (`custodia.signing` — HMAC + detached SSH signatures over `canonical_bytes()`)
 - [ ] Content-addressed storage adapters (IPFS / CAS)
+- [ ] GPG / Ed25519 native signing backends
 
 ## License
 
