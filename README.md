@@ -13,9 +13,9 @@ ingestion pipeline that needs an auditable chain of custody rather than a vague
 "trust us."
 
 > Status: **v0 (early)**. The model here is generalized from production use in a
-> large knowledge-graph system where it seals **1.1M+ sources** across two
-> databases. This repository re-implements that model as a clean, dependency-light,
-> reusable tool.
+> large knowledge-graph system where it seals **555k+ unique sources** (1.1M+
+> seal records across two databases sharing one deduplicated corpus). This
+> repository re-implements that model as a clean, dependency-light, reusable tool.
 
 ## The honest custody model
 
