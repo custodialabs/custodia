@@ -13,13 +13,17 @@ ingestion pipeline that needs an auditable chain of custody rather than a vague
 "trust us."
 
 > Status: **v0 (early)**. The model here is generalized from production use in a
-> large knowledge-graph system. Measured 2026-08-22: **4,235,831 unique sealed
-> sources** (4,810,485 seal records across two databases). The two databases share
-> one corpus — the smaller is a strict subset of the larger, verified by measuring
-> that none of its distinct sealed URLs are absent from the other — so unique
-> sources and seal records are **deduplicated and never summed into one number**.
-> This repository re-implements that model as a clean, dependency-light, reusable
-> tool.
+> large knowledge-graph system. Measured 2026-10-12: **4,068,329 verifiable
+> sources** (88.8 %) — sources that are both tied to at least one graph node and
+> carry a sha256 seal — out of 4,579,036 source records, of which 4,282,205
+> (93.5 %) are sealed. Each figure counts something different and they are
+> **never summed or swapped**. About 62 % of the verifiable sources are entity
+> records sealed from a public data dump, about 25 % news and web articles, and
+> about 9 % records from published leak databases: sealed and unaltered, not
+> primary documents. A full re-hash pass against the dump re-read 2,511,053 sealed
+> rows: 2,495,038 carry the same hash as the dump line, **0 differ**, and 16,015
+> were sealed by another route. This repository re-implements that model as a
+> clean, dependency-light, reusable tool.
 
 ## The honest custody model
 
